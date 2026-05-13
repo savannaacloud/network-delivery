@@ -1,0 +1,24 @@
+prefix              = "net-demo"
+region              = "ng-abuja-1"
+
+# Outer VPC + per-tier subnets
+vpc_cidr            = "10.50.0.0/16"
+subnet_cidrs = {
+  web    = "10.50.1.0/24"
+  app    = "10.50.2.0/24"
+  worker = "10.50.3.0/24"
+}
+
+# Domain name for public + private DNS. *.savannaa.com auto-delegates;
+# otherwise use a domain you own and we'll create a hosted zone for it.
+domain_name         = "net-demo.savannaa.com"
+
+# Optional: peer this VPC into a hub VPC. Empty disables.
+peer_network_id     = ""
+
+# Toggles
+enable_load_balancer = true
+enable_cdn           = false
+enable_bastion       = true
+bastion_allowed_cidr = "0.0.0.0/0"      # tighten in production!
+edge_ip_count        = 2
