@@ -24,7 +24,7 @@ output "bastion_id" {
 }
 
 output "bastion_private_key" {
-  description = "Bastion SSH key (PEM). Returned once. `terraform output -raw bastion_private_key > ~/.ssh/${var.prefix}-bastion.pem`."
+  description = "Bastion SSH key (PEM). Returned once. `terraform output -raw bastion_private_key > ~/.ssh/<prefix>-bastion.pem`."
   value       = try(sws_keypair.bastion[0].private_key, null)
   sensitive   = true
 }
