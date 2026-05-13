@@ -64,6 +64,7 @@ resource "sws_security_group_rule" "ssh" {
   protocol          = "tcp"
   port_range_min    = 22
   port_range_max    = 22
+  ethertype         = "IPv4"
   remote_ip_prefix  = var.bastion_allowed_cidr
 }
 
@@ -74,6 +75,7 @@ resource "sws_security_group_rule" "web_http" {
   protocol          = "tcp"
   port_range_min    = 80
   port_range_max    = 80
+  ethertype         = "IPv4"
   remote_ip_prefix  = "0.0.0.0/0"
 }
 
@@ -83,6 +85,7 @@ resource "sws_security_group_rule" "web_https" {
   protocol          = "tcp"
   port_range_min    = 443
   port_range_max    = 443
+  ethertype         = "IPv4"
   remote_ip_prefix  = "0.0.0.0/0"
 }
 
@@ -101,8 +104,9 @@ resource "sws_floating_ip" "edge" {
 # default one for you. We pass an explicit keypair below for predictability.
 
 resource "sws_keypair" "bastion" {
-  count = var.enable_bastion ? 1 : 0
-  name  = "${local.prefix}-bastion-key"
+  count      = var.enable_bastion ? 1 : 0
+  name       = "${local.prefix}-bastion-key"
+  public_key = file(pathexpand(var.ssh_public_key_file))
 }
 
 resource "sws_bastion" "jump" {
@@ -192,9 +196,11 @@ resource "sws_private_dns_zone" "internal" {
 resource "sws_vpc_peering" "peer" {
   count = var.peer_network_id == "" ? 0 : 1
 
-  name             = "${local.prefix}-peer"
-  local_network_id = sws_network.spoke.id
-  peer_network_id  = var.peer_network_id
+  name = "${local.prefix}-peer"
+  config = jsonencode({
+    local_network_id = sws_network.spoke.id
+    peer_network_id  = var.peer_network_id
+  })
 }
 
 # ── Service Discovery, Transit Hub, Private Endpoints, Express Link,

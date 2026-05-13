@@ -23,12 +23,6 @@ output "bastion_id" {
   description = "Bastion VM id. null when enable_bastion = false."
 }
 
-output "bastion_private_key" {
-  description = "Bastion SSH key (PEM). Returned once. `terraform output -raw bastion_private_key > ~/.ssh/<prefix>-bastion.pem`."
-  value       = try(sws_keypair.bastion[0].private_key, null)
-  sensitive   = true
-}
-
 output "load_balancer_id" {
   value = try(sws_load_balancer.public[0].id, null)
 }

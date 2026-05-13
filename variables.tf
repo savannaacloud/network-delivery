@@ -33,6 +33,12 @@ variable "domain_name" {
   default     = "net-demo.savannaa.com"
 }
 
+variable "ssh_public_key_file" {
+  description = "Path to an existing SSH public key file (used by the bastion). BYO — provider doesn't generate keys."
+  type        = string
+  default     = "~/.ssh/id_rsa.pub"
+}
+
 variable "peer_network_id" {
   description = "Existing network ID to peer this VPC with. Empty disables the peering resource."
   type        = string
