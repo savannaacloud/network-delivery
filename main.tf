@@ -112,11 +112,13 @@ resource "sws_keypair" "bastion" {
 resource "sws_bastion" "jump" {
   count = var.enable_bastion ? 1 : 0
 
-  name         = "${local.prefix}-bastion"
-  network_id   = sws_network.spoke.id
-  key_name     = sws_keypair.bastion[0].name
-  allowed_cidr = var.bastion_allowed_cidr
-  ssh_port     = 22
+  name = "${local.prefix}-bastion"
+  config = jsonencode({
+    network_id   = sws_network.spoke.id
+    key_name     = sws_keypair.bastion[0].name
+    allowed_cidr = var.bastion_allowed_cidr
+    ssh_port     = 22
+  })
 }
 
 # ── Load Balancer + Listener + Pool ────────────────────────────────────────
@@ -167,6 +169,7 @@ resource "sws_cdn" "edge" {
 
 resource "sws_dns_zone" "public" {
   name        = "${var.domain_name}."   # zones end with a dot
+  email       = var.dns_admin_email
   description = "${local.prefix} public hosted zone"
 }
 

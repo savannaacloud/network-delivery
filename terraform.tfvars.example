@@ -22,3 +22,4 @@ enable_cdn           = false
 enable_bastion       = true
 bastion_allowed_cidr = "0.0.0.0/0"      # tighten in production!
 edge_ip_count        = 2
+# dns_admin_email = "hostmaster@your-domain.com"

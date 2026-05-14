@@ -76,3 +76,10 @@ variable "edge_ip_count" {
   type        = number
   default     = 2
 }
+
+
+variable "dns_admin_email" {
+  description = "SOA admin email for the public DNS zone (Designate uses this in the SOA RNAME field with @ replaced by .)."
+  type        = string
+  default     = "hostmaster@savannaa.com"
+}
